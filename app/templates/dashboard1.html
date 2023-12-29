@@ -1,0 +1,76 @@
+<html>
+
+<head>
+  <title>Dashboard</title>
+</head>
+
+<body>
+  <h1>Welcome, {{ username }}!</h1>
+  <p>This is your dashboard.</p>
+  <a href="/logout">Logout</a>
+
+  <h1>Websocket Testing</h1>
+  <h2>Websocket Testing</h2>
+  <input type="text" id="messageInput" placeholder="Type your message...">
+  <button onclick="sendMessage()">Send</button>
+
+  <ul id="messageList"></ul>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+<script type="text/javascript">
+  var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+  socket.on('connect', function () {
+    console.log('Connected to WebSocket.');
+    // Get all <h2> elements
+    var h2Elements = document.getElementsByTagName("h2");
+
+    // Iterate through the collection and replace the text content
+    for (var i = 0; i < h2Elements.length; i++) {
+      h2Elements[i].textContent = 'Connected to WebSocket';
+    }
+  });
+
+  socket.on('disconnect', function () {
+    console.log('Disconnected from WebSocket.');
+    // Get all <h2> elements
+    var h2Elements = document.getElementsByTagName("h2");
+
+    // Iterate through the collection and replace the text content
+    for (var i = 0; i < h2Elements.length; i++) {
+      h2Elements[i].textContent = 'Disconnected from WebSocket.';
+    }
+  });
+
+  // Add more WebSocket event handlers for your application's needs
+  // Send a message to the server
+  function sendMessage() {
+    var messageInput = document.getElementById('messageInput');
+    var message = messageInput.value;
+
+    // Emit a custom 'send_message' event to the server
+    socket.emit('send_message', { message: message });
+
+    messageInput.value = ''; // Clear the input field
+  }
+
+  // Receive and display a message from the server
+  socket.on('receive_message', function (data) {
+    var messageList = document.getElementById('messageList');
+    var listItem = document.createElement('li');
+    listItem.textContent = data.user + " : " + data.message;
+    messageList.appendChild(listItem);
+  });
+
+  socket.on('update', function (data) {
+    // Handle updates received from the server
+    console.log('Received update:', data);
+    // Update the DOM or perform any necessary actions
+    var messageList = document.getElementById('messageList');
+    var listItem = document.createElement('li');
+    listItem.textContent = data.user + " : " + data.message;
+    messageList.appendChild(listItem);
+  });
+</script>
+
+</html>

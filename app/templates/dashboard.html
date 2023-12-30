@@ -175,66 +175,144 @@
   </nav>
   <!-- Feature 1 -->
 
-  <div class="container mt-5">
-    <!-- Health Tips Section -->
-    <div class="card mb-4">
-      <div class="card-header">
-        <h3 class="card-title">Health Tips</h3>
-      </div>
-      <div class="card-body">
-        <ul>
-          <li>Tip 1: Eat a balanced diet.</li>
-          <li>Tip 2: Exercise regularly.</li>
-          <li>Tip 3: Get enough sleep.</li>
-          <!-- Add more health tips as needed -->
-        </ul>
-      </div>
-    </div>
-    <!-- Nearby Hospitals Section -->
-    <div class="card">
-      <div class="card-header">
-        <h3 class="card-title">Nearby Hospitals</h3>
-      </div>
-      <div class="card-body">
-        <!-- Add hospital addresses or integrate with a map API for dynamic locations -->
-        <ul>
-          <li>Hospital 1: 123 Main St, Cityville</li>
-          <li>Hospital 2: 456 Oak St, Townsville</li>
-          <li>Hospital 3: 789 Pine St, Villagetown</li>
-          <!-- Add more hospital addresses as needed -->
-        </ul>
-      </div>
-    </div>
-  
-  </div>
+  <style>
+    .card {
+      border: none;
+      /* No border */
+      border-radius: 12px;
+      margin-bottom: 20px;
+      margin-left: 0px;
+      margin-right: 0px;
+      padding-left: 0px;
+      padding-right: 0px;
+      background-color: #fff;
+      /* White background */
+      box-shadow: 0 5px 5px rgba(0, 0, 0.1, 0.1);
+      /* Soft shadow */
+    }
 
+    .card-header {
+      background-color: rgba(58, 127, 255, 0.884);
+      /* Dark green header background */
+      color: #fff;
+      /* White text for header */
+      padding: 5px;
+      margin: 0px;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .card-title {
+      margin: 0;
+      font-size: 1.4rem;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .nearby-hospitals li {
+      padding: 8px;
+      background-color: #f0f0f0;
+      /* Light gray background for hospital addresses */
+      border-radius: 6px;
+    }
+
+    .medicine-section {
+      margin-top: 40px;
+    }
+
+    .list-group-item {
+      display: flex;
+      justify-content: start;
+      align-items: center;
+      border: none;
+      background-color: #fff; /* White background */
+      margin-bottom: 10px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Soft shadow */
+      padding: 15px;
+    }
+
+    .badge {
+      background-color: #4CAF50; /* Dark green badge background */
+      color: #fff; /* White text color for badge */
+      padding: 8px;
+      border-radius: 8px;
+    }
+
+    .list-group-item p {
+      margin: 0;
+    }
+  </style>
+  <!-- </head>
+<body> -->
 
   <div class="container mt-5">
-    <div class="row g-5">
-      <div class="col-md-4">
-        <div class="image-container shadow-sm">
-          <img class=""
-            src="https://img.freepik.com/premium-vector/red-flasher-siren-with-text-sos-vector-icon-alert-flashing-light-flat-style-simple-helpline-emergency-sos-sign-vector-illustration_735449-499.jpg?w=2000"
-            alt="sos">
+    <div class="row" style="column-gap: 15px;">
+      <!-- Health Tips Section -->
+      <div class="card col">
+        <div class="card-header">
+          <h3 class="card-title " style="color: white;">🌿 Health Tips</h3>
+          <!-- Added a leaf emoji for a creative touch -->
+        </div>
+        <div class="card-body">
+          <ul>
+            <li>🥗 Tip 1: Eat a balanced diet.</li> <!-- Added food emojis for a creative touch -->
+            <li>🏋️‍♂️ Tip 2: Exercise regularly.</li>
+            <li>😴 Tip 3: Get enough sleep.</li>
+            <!-- Add more health tips as needed -->
+          </ul>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="image-container shadow-sm position-relative text-center">
-          <h5>Medicine Supply</h5>
-          <img class=""
-            src="https://img.freepik.com/premium-vector/red-flasher-siren-with-text-sos-vector-icon-alert-flashing-light-flat-style-simple-helpline-emergency-sos-sign-vector-illustration_735449-499.jpg?w=2000"
-            alt="sos">
+      <!-- Nearby Hospitals Section -->
+      <div class="card col nearby-hospitals">
+        <div class="card-header">
+          <h3 class="card-title" style="color: white;">🏥 Nearby Hospitals</h3>
+          <!-- Added a hospital emoji for a creative touch -->
+        </div>
+        <div class="card-body">
+          <ul>
+            <li>Hospital 1: 123 Main St, Cityville</li>
+            <li>Hospital 2: 456 Oak St, Townsville</li>
+            <li>Hospital 3: 789 Pine St, Villagetown</li>
+            <!-- Add more hospital addresses as needed -->
+          </ul>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="image-container shadow-sm">
-          <img class=""
-            src="https://img.freepik.com/premium-vector/red-flasher-siren-with-text-sos-vector-icon-alert-flashing-light-flat-style-simple-helpline-emergency-sos-sign-vector-illustration_735449-499.jpg?w=2000"
-            alt="sos">
+
+      <div class=" card col ">
+        <div class="card-header">
+          <h3  class="card-title" style="color: white;" >💊 Medicine Status</h3> <!-- Added a thermometer emoji for a cool touch -->
         </div>
+          <ul class="list-group">
+            {% for reminder in reminders %} <!-- Display reminders from Flask -->
+              <li class="list-group-item">
+                <span class="badge">{{ reminder.reminder_time }}</span>
+                <div style="padding-left: 15px;">
+                  <p style="font-weight: 600;">{{ reminder.medicine_label }}</p>
+                  <p style="font-weight: 600;">{{ reminder.description }}</p>
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
       </div>
+
     </div>
   </div>
+  <!-- 
+</body>
+</html> -->
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -26,7 +26,8 @@ SECRET_KEY=your_secret_key
 # Database URI for SQLAlchemy
 SQLALCHEMY_DATABASE_URI=your_database_uri
 
-# Add other required configurations...```
+# Add other required configurations
+'''
 
 This updated section now includes specific instructions for creating the `.env` file, configuring it with the required parameters, and running the Flask application locally. Adjust the instructions according to your project's specific requirements.
 

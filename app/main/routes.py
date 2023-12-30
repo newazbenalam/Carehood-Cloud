@@ -6,8 +6,14 @@ from app.main.model import Reminder, User
 from . import main
 from .forms import LoginForm
 
-
 @main.route('/', methods=['GET', 'POST'])
+def indexof():
+    if session.get('logged_in'):
+        return redirect(url_for('main.dashboard'))
+    else:
+        return redirect(url_for('main.login'))
+
+@main.route('/custom', methods=['GET', 'POST'])
 def index():
     """Login form to enter a room."""
     form = LoginForm()
@@ -87,9 +93,9 @@ def login():
 @main.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
     if 'logged_in' in session:
-        
         username = session['username']
-        return render_template('dashboard.html', username=username)
+        reminders = Reminder.query.limit(2).all()
+        return render_template('dashboard.html', username=username, reminders=reminders)
     return redirect(url_for('main.login'))
 
 

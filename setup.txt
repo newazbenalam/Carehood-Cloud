@@ -1,0 +1,64 @@
+ssh -i newaz-key-pub-a.pem ubuntu@54.199.35.201
+chmod 400 newaz-key-pub-a.pem
+
+
+#!/bin/bash
+git clone https://github.com/newazbenalam/Carehood-Cloud
+cd Carehood-Cloud
+sudo apt-get update -y
+sudo apt install python3-pip -y
+sudo apt install apache2 apache2-utils ssl-cert libapache2-mod-wsgi-py3 -y
+pip install -r requirements.txt -y
+sudo setcap 'cap_net_bind_service=+ep' /usr/bin/python3.10
+sudo setcap 'cap_net_bind_service=+ep' /usr/bin/python3
+sudo systemctl stop apache2
+sudo systemctl disable apache2
+python3 app.py
+
+
+
+
+
+private server:
+
+#!/bin/bash
+
+# Update the package manager
+sudo apt-get update -y
+
+# Install Apache HTTP Server and MySQL Server
+sudo apt-get install apache2 mysql-server -y
+
+# Start and enable Apache service
+sudo systemctl start apache2
+sudo systemctl enable apache2
+
+# Start and enable MySQL service
+sudo systemctl start mysql
+sudo systemctl enable mysql
+
+
+
+
+sudo mysql -u root -p
+CREATE DATABASE `carehood`;
+
+SHOW DATABASES;
+
+
+CREATE USER `mysql`@`%` IDENTIFIED BY `12345`;
+GRANT ALL PRIVILEGES ON *.* TO `username`@`%`;
+FLUSH PRIVILEGES;
+
+DROP USER 'mysql'@'%';
+
+GRANT CREATE ON *.* TO 'root'@'';
+
+CREATE USER 'mysql'@'%' IDENTIFIED BY '12345';
+GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'%';
+FLUSH PRIVILEGES;
+
+
+
+SELECT user, host FROM mysql.user;
+

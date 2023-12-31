@@ -15,6 +15,17 @@ class User(db.Model):
 
     def __repr__(self):
         return f'<User {self.username}>'
+    
+    
+class Room(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    timestamp = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
+
+    sender = db.relationship('User', foreign_keys=[sender_id], backref='sent_messages')
+    receiver = db.relationship('User', foreign_keys=[receiver_id], backref='received_messages')
+
       
       
 # Create a model for the reminders
@@ -23,3 +34,5 @@ class Reminder(db.Model):
     reminder_time = db.Column(db.String(10), nullable=False)
     medicine_label = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text)
+    
+    

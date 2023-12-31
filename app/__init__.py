@@ -1,8 +1,10 @@
 import os
 from flask import Flask
 from flask_socketio import SocketIO
+import pymysql
+pymysql.install_as_MySQLdb()
+# from .extensions import limiter  # Import the limiter from extensions.py
 from dotenv import load_dotenv
-
 load_dotenv()
 
 socketio = SocketIO()
@@ -13,7 +15,7 @@ from flask_sqlalchemy import SQLAlchemy
 # app = Flask(__name__, static_url_path='/static')
 app = Flask(__name__) 
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_UR')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 

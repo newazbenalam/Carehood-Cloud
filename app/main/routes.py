@@ -2,9 +2,17 @@ from flask import session, redirect, url_for, render_template, request
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
 
-from app.main.model import Reminder, User
+from app.main.model import Reminder, Room, User
 from . import main
 from .forms import LoginForm
+
+# Define routes that don't require login
+allowed_routes = ['main.login', 'main.signup']
+
+@main.before_request
+def check_signed_in():
+    if not session.get('logged_in') and request.endpoint not in allowed_routes:
+        return render_template('login.html')
 
 @main.route('/', methods=['GET', 'POST'])
 def indexof():
@@ -27,17 +35,59 @@ def index():
     return render_template('index.html', form=form)
 
 
+@main.route('/chat/<path>')
+def chatpath(path):
+    """Chat room. The user's name and room must be stored in the session."""
+    name = session.get('username')
+
+    if not name:
+        return redirect(url_for('.chat'))
+
+    sender = User.query.filter_by(username=name).first()
+    receiver = User.query.filter_by(username=path).first()
+
+    if not receiver:
+        return redirect(url_for('.chat'))
+
+    room_entry = Room.query.filter(
+        ((Room.sender_id == sender.id) & (Room.receiver_id == receiver.id)) |
+        ((Room.sender_id == receiver.id) & (Room.receiver_id == sender.id))
+    ).first()
+
+    if not room_entry:
+        new_room = Room(sender_id=sender.id, receiver_id=receiver.id)
+        db.session.add(new_room)
+        db.session.commit()
+        room_entry = new_room
+
+    session['room'] = room_entry.id
+    session['receiver'] = path
+
+    # Fetching distinct user names from the User table
+    users = User.query.with_entities(User.username).distinct().all()
+    user_names = [user[0] for user in users]
+    
+    # return render_template('chat.html', name=receiver, room=room_entry.id, username=session.get('username'), user_names=user_names)
+
+    return redirect(url_for('.chat'))
+
+
 @main.route('/chat')
 def chat():
     """Chat room. The user's name and room must be stored in
     the session."""
-    # name = session.get('name', '')
-    # room = session.get('room', '')
     name = session.get('username')
-    room = session.get('username')
+    room = session.get('room')
     if name == '' or room == '':
         return redirect(url_for('.index'))
-    return render_template('chat.html', name=name, room=room,username=session.get('username'))
+    
+    # Fetching distinct user names from the User table
+    users = User.query.with_entities(User.username).distinct().all()
+    user_names = [user[0] for user in users]
+    receiver = session.get('receiver')
+
+    
+    return render_template('chat.html', name=receiver, room=room, username=session.get('username'), user_names=user_names)
 
 @main.route('/chat1')
 def chat1():

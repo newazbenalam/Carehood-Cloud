@@ -1,5 +1,9 @@
+import os
 from flask import Flask
 from flask_socketio import SocketIO
+from dotenv import load_dotenv
+
+load_dotenv()
 
 socketio = SocketIO()
 
@@ -8,8 +12,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 # app = Flask(__name__, static_url_path='/static')
 app = Flask(__name__) 
-app.config['SECRET_KEY'] = 'gjr39dkjn344_!67#'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://mysql:12345@localhost:3306/carehood'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_UR')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 

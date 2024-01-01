@@ -109,6 +109,46 @@ SQLALCHEMY_DATABASE_URI=your_database_uri
 
 This updated section now includes specific instructions for creating the `.env` file, configuring it with the required parameters, and running the Flask application locally. Adjust the instructions according to your project's specific requirements.
 
+### Setting Up Elastic Load Balancer (ELB) with EC2 Instances
+
+An Elastic Load Balancer (ELB) distributes incoming application traffic across multiple EC2 instances to ensure high availability and fault tolerance. Here's a step-by-step guide to set up an ELB with EC2 instances:
+
+1. **Launch EC2 Instances**
+    - Launch two or more EC2 instances in different availability zones. Ensure they run the application you want to load balance.
+    - Configure the security groups for the instances to allow incoming traffic from the load balancer (usually on ports 80 and 443 for HTTP/HTTPS).
+
+2. **Create an Application Load Balancer**
+    - Go to the AWS Management Console and navigate to the EC2 service.
+    - Select "Load Balancers" and click "Create Load Balancer".
+    - Choose "Application Load Balancer".
+    - Configure the load balancer settings, including its name, scheme (internet-facing/internal), listeners (HTTP or HTTPS), and availability zones.
+    - Configure the security settings and select or create a new SSL certificate if using HTTPS.
+    - Configure routing and specify the target group. Create a new target group and select the registered EC2 instances.
+
+3. **Configure Target Groups**
+    - Define a target group specifying the protocol, port, health checks, and the registered EC2 instances.
+    - Set up health checks to monitor the health of instances. Adjust health check settings based on your application's behavior and requirements.
+
+4. **Register EC2 Instances**
+    - Register the previously launched EC2 instances to the target group associated with the load balancer.
+    - Ensure that the instances pass the health checks before proceeding.
+
+5. **Adjust Load Balancer Settings**
+    - Configure additional settings like load balancer attributes, cross-zone load balancing, connection draining, etc., based on your application's needs.
+
+6. **Test the Load Balancer**
+    - Access the application using the load balancer's DNS name or IP address.
+    - Verify that requests are distributed across the registered EC2 instances and that the application works as expected.
+
+7. **Monitor and Scale**
+    - Monitor the load balancer's performance and configure alarms to handle traffic spikes.
+    - Configure auto-scaling policies to automatically scale EC2 instances based on the load balancer's metrics.
+
+Conclusion:
+
+Setting up an Elastic Load Balancer (ELB) with EC2 instances provides improved fault tolerance, scalability, and efficient distribution of incoming traffic. Ensure to regularly monitor and optimize configurations for optimal performance.
+
+
 ## Application Structure
 ```
 Carehood_Application/

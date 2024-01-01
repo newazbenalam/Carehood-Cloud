@@ -17,10 +17,86 @@ Please follow these steps to run the Carehood Application locally:
 5. Run the Flask application using `python app.py`.
 6. Access the application via your web browser at `http://localhost:5000`.
 
+### Deploying on AWS EC2
+
+To deploy the Carehood Application on an AWS EC2 instance, follow these steps:
+
+1. **Launch an EC2 Instance:**
+    - Choose an appropriate instance type (e.g., Ubuntu).
+    - Set up security groups to allow inbound traffic on necessary ports (e.g., 80, 443).
+
+2. **Connect to Your EC2 Instance:**
+    - Use SSH to connect to your EC2 instance:
+      ```bash
+      ssh -i your-key.pem ubuntu@your-ec2-public-ip
+      ```
+
+3. **Clone the Repository:**
+    - Clone this repository into the home directory:
+      ```bash
+      git clone https://github.com/your-username/Carehood-Cloud.git
+      ```
+
+4. **Install Dependencies and Setup:**
+    - Install Python and required packages:
+      ```bash
+      sudo apt update
+      sudo apt install python3 python3-pip -y
+      sudo pip3 install -r requirements.txt
+      ```
+
+5. **Run the Application:**
+    - Navigate to the project directory and start the Flask application:
+      ```bash
+      cd Carehood-Cloud
+      python3 app.py
+      ```
+
+6. **Access the Application:**
+    - Access the application via your web browser using your EC2 instance's public IP address.
+
+
+### User Script
+
+User custom script for EC2. Which automatacially download and setup the envirnoment. Makes efficient for elastic load balanceing.
+
+```
+#!/bin/bash
+sudo apt-get update -y
+sudo apt install -y python3-pip apache2 apache2-utils ssl-cert libapache2-mod-wsgi-py3
+# Clone the repository
+git clone https://github.com/newazbenalam/Carehood-Cloud /home/ubuntu/Carehood-Cloud
+pip3 install -r /home/ubuntu/Carehood-Cloud/requirements.txt
+
+echo "# Flask secret key
+SECRET_KEY='gjr39dkjn344_!67#'
+# Database URI for SQLAlchemy
+SQLALCHEMY_DATABASE_URI='mysql://mysql:12345@192.168.0.72:3306/carehood'
+# HOST and PORT for Flask
+HOST=0.0.0.0
+PORT=80
+DEBUG=false" > /home/ubuntu/Carehood-Cloud/.env
+
+# Grant capabilities to bind to privileged ports
+sudo setcap 'cap_net_bind_service=+ep' /usr/bin/python3.10
+sudo setcap 'cap_net_bind_service=+ep' /usr/bin/python3
+
+# Stop and disable Apache (if running)
+sudo systemctl stop apache2
+sudo systemctl disable apache2
+
+# Run your Flask application
+sudo cp /home/ubuntu/Carehood-Cloud/myflaskapp.service /etc/systemd/system/myflaskapp.service
+
+sudo systemctl daemon-reload
+sudo systemctl enable myflaskapp
+sudo systemctl start myflaskapp
+```
+
+
 ### Environment Variables (.env file)
 
 Configure your `.env` file with the following parameters:
-
 
 #### Example .env file
 ```
